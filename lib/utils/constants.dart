@@ -3,20 +3,19 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 const String appName = "My Finance";
-Color backgroundColor = Colors.grey[300]!;
-Color primaryColor =
-    const Color.fromARGB(255, 64, 175, 226)!; // A gold-like color for accents
-Color textColor = Colors.black87;
+Color backgroundColor = const Color(0xFFFFFFFF);
+Color primaryColor = Colors.teal as Color; // A gold-like color for accents
+Color textColor = Colors.white;
 
 Color headerTextColor = Colors.white;
 Color textColorButton = Colors.white;
 Color buttonColor = const Color.fromARGB(255, 18, 141, 223)!;
 
 Color primaryGradientColor =
-    Color.fromARGB(255, 138, 203, 233)!; // Dark or light background
+    const Color(0xFF148BC6); // Dark or light background
 
 Color secondaryGradientColor =
-    const Color.fromARGB(255, 64, 175, 226)!; // Dark or light background
+    const Color(0xFF148BC6); // Dark or light background
 const basicData = [
   {'genre': 'Sports', 'sold': 275},
   {'genre': 'Strategy', 'sold': 115},

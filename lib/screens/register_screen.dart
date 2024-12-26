@@ -14,6 +14,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final AuthService _authService = AuthService();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -78,7 +85,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () async {
                         final email = _emailController.text.trim();
                         final password = _passwordController.text.trim();
-                        if (await _authService.register(email, password)) {
+                        final user =
+                            await _authService.register(email, password);
+                        if (user != null) {
                           Navigator.pushNamed(context, '/login');
                         } else {
                           showError(context, 'Registration failed');

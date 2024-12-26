@@ -14,26 +14,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthService _authService = AuthService();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
     var isDarkMode = themeData.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-        backgroundColor: primaryColor, // Gold-like color
-        foregroundColor: headerTextColor,
-      ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              primaryGradientColor,
-              secondaryGradientColor
-            ], // Gradient from dark gray to black
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          color: primaryColor,
         ),
         child: Center(
           child: SingleChildScrollView(
@@ -77,7 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () async {
                         final email = _emailController.text;
                         final password = _passwordController.text;
-                        if (await _authService.login(email, password)) {
+                        final user = await _authService.login(email, password);
+                        if (user != null) {
                           Navigator.pushNamed(context, '/home');
                         } else {
                           showError(context, 'Invalid login credentials');
@@ -127,32 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (await _authService.loginWithFacebook()) {
-                          Navigator.pushNamed(context, '/home');
-                        } else {
-                          showError(context, 'Failed to log in with Facebook');
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        backgroundColor: Colors.blue[800],
-                        foregroundColor: textColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.facebook, color: Colors.white),
-                          SizedBox(width: 10),
-                          Text('Sign In with Facebook',
-                              style: TextStyle(color: textColorButton)),
-                        ],
-                      ),
-                    ),
+                     
                     SizedBox(height: 20),
                     TextButton(
                       onPressed: () {

@@ -10,6 +10,8 @@ import 'package:myfinance/widgets/BuildBarChart.dart';
 import 'package:myfinance/widgets/BuildDrawer.dart';
 import 'package:myfinance/widgets/BuildRoseChart.dart';
 
+import '../widgets/MyDrawer.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -23,13 +25,11 @@ class _HomePageState extends State<HomePage> {
   List<Map> barAnimData = [];
   List<Map> roseData = [];
   List<List> scatterAnimData = [];
-  late Timer timer;
 
   @override
   void initState() {
     super.initState();
     _initializeChartData();
-    _setupTimer();
   }
 
   void _initializeChartData() {
@@ -62,20 +62,12 @@ class _HomePageState extends State<HomePage> {
             ]);
   }
 
-  void _setupTimer() {
-    timer = Timer.periodic(const Duration(seconds: 2), (_) {
-      setState(() {
-        _initializeChartData();
-      });
-    });
-  }
-
   Widget _buildChartCard(Widget chart, String title) {
     return Card(
       elevation: 4,
-      margin: const EdgeInsets.all(8),
+      margin: const EdgeInsets.all(4),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -86,7 +78,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 10),
             Container(
               width: double.infinity,
-              height: 300,
+              height: 250,
               child: chart,
             ),
           ],
@@ -97,28 +89,124 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var themeData = Theme.of(context);
+    var isDarkMode = themeData.brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: Text('My Finance'),
         backgroundColor: primaryColor,
+        foregroundColor: headerTextColor,
       ),
-      drawer: BuildDrawer(context),
+      drawer: MyDrawer(),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            _buildChartCard(BuildBarChart(barAnimData), 'Monthly Income'),
-            _buildChartCard(BuildRoseChart(roseData), 'Income Vs Expenditure'),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildBalanceTile(
+                      'Income',
+                      '500000',
+                      Icon(
+                        Icons.account_balance_wallet,
+                        color: Colors.green[700],
+                        size: 30,
+                      ),
+                      Colors.white as Color),
+                ),
+                Expanded(
+                  child: _buildBalanceTile(
+                      'Expenses',
+                      '75500000',
+                      Icon(
+                        Icons.inbox,
+                        color: Colors.red[700],
+                        size: 30,
+                      ),
+                      Colors.white as Color),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildBalanceTile(
+                      'Savings',
+                      '500000',
+                      Icon(
+                        Icons.account_balance,
+                        color: const Color.fromARGB(255, 196, 9, 202),
+                        size: 30,
+                      ),
+                      Colors.white as Color),
+                ),
+                Expanded(
+                  child: _buildBalanceTile(
+                      'Budget',
+                      '500000',
+                      Icon(
+                        Icons.account_balance_wallet,
+                        color: const Color.fromARGB(255, 116, 16, 205),
+                        size: 30,
+                      ),
+                      Colors.white as Color),
+                ),
+              ],
+            ),
+            // Generated code for this Column Widget...
+            _buildChartCard(BuildRoseChart(roseData), 'Expenditure'),
+            // _buildChartCard(BuildBarChart(barAnimData), 'Income'),
+            Column(
+              children: <Widget>[],
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBalanceTile() {
-    return ListTile(
-      title: Text('Balance', style: TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: Text('\$5000'),
-      leading: Icon(Icons.account_balance_wallet, color: primaryColor),
+  Widget _buildBalanceTile(label, value, icon, Color color) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.all(4),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 6,
+              color: Color(0x4B1A1F24),
+              offset: Offset(
+                0.0,
+                2,
+              ),
+            )
+          ],
+          gradient: LinearGradient(
+            colors: [primaryColor, color],
+            stops: [0, 1],
+            begin: AlignmentDirectional(0.94, -1),
+            end: AlignmentDirectional(-0.94, 1),
+          ),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                title:
+                    Text(label, style: TextStyle(fontStyle: FontStyle.italic)),
+                subtitle: Text(
+                  double.parse(value).toStringAsFixed(2),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                leading: icon,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -133,7 +221,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    timer.cancel();
     super.dispose();
   }
 }

@@ -1,16 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   // Placeholder login method
-  Future<bool> login(String email, String password) async {
-    // Simulate a real login process (replace with your API logic)
-    await Future.delayed(Duration(seconds: 2));
-    return email == 'user@example.com' && password == 'password';
+  Future<User?> login(String email, String password) async {
+    try {
+      final credencials = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return credencials.user;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   // Placeholder register method
-  Future<bool> register(String email, String password) async {
-    // Simulate a real registration process
-    await Future.delayed(Duration(seconds: 2));
-    return email.isNotEmpty && password.isNotEmpty;
+  Future<User?> register(String email, String password) async {
+    try {
+      final credencials = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return credencials.user;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   Future<bool> signInWithGoogle() async {
@@ -23,5 +36,15 @@ class AuthService {
     // Simulate a real login process
     await Future.delayed(Duration(seconds: 2));
     return true;
+  }
+
+  Future<bool> signOut() async {
+    try {
+      await _auth.signOut();
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 }

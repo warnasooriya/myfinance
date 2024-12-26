@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myfinance/routes/app_routes.dart';
 import 'package:myfinance/utils/constants.dart';
 
-void main() {
+void main() async {
   runApp(
     DevicePreview(
       enabled: true,

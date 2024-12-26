@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:myfinance/screens/budget_screen.dart';
+import 'package:myfinance/screens/expenses_types.dart';
 import 'package:myfinance/screens/home_screen.dart';
+import 'package:myfinance/screens/income_types.dart';
 import 'package:myfinance/screens/transaction_screen.dart';
 import 'package:myfinance/utils/constants.dart';
 
@@ -40,17 +43,29 @@ Drawer BuildDrawer(context) {
         ListTile(
           leading: Icon(Icons.trending_up),
           title: Text('Budgets'),
-          onTap: () {},
+          onTap: () {
+            Navigator.pop(context); // Close the drawer
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => BudgetScreen()));
+          },
         ),
         ListTile(
           leading: Icon(Icons.money_sharp),
           title: Text('Income Types'),
-          onTap: () {},
+          onTap: () {
+            Navigator.pop(context); // Close the drawer
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => IncomeTypesScreen()));
+          },
         ),
         ListTile(
           leading: Icon(Icons.money_off),
           title: Text('Expense Types'),
-          onTap: () {},
+          onTap: () {
+            Navigator.pop(context); // Close the drawer
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ExpensesTypesScreen()));
+          },
         ),
         ListTile(
           leading: Icon(Icons.logout),
